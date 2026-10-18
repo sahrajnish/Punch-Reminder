@@ -1,0 +1,116 @@
+<resources>
+    <!-- App -->
+    <string name="app_name">Punch Reminder</string>
+    <string name="title_home">Home</string>
+    <string name="title_history">History</string>
+    <string name="title_settings">Settings</string>
+
+    <!-- Home screen -->
+    <string name="home_current_date">Current date and time</string>
+    <string name="home_attendance_status">Today\u2019s attendance</string>
+    <string name="home_scheduled_sign_in">Scheduled sign-in reminder</string>
+    <string name="home_actual_sign_in">Confirmed sign-in</string>
+    <string name="home_next_sign_out">Next sign-out reminder</string>
+    <string name="home_countdown">Time remaining</string>
+    <string name="home_open_greythr">Open greytHR</string>
+    <string name="home_confirm_sign_in">I\u2019ve signed in</string>
+    <string name="home_confirm_sign_out">I\u2019ve signed out</string>
+    <string name="home_skip_today">Skip today</string>
+    <string name="home_snooze">Snooze 10 min</string>
+
+    <string name="home_status_not_signed_in">Not signed in yet today.</string>
+    <string name="home_status_signed_in">Signed in.</string>
+    <string name="home_status_sign_out_due">Sign-out reminder is due.</string>
+    <string name="home_status_signed_out">Today\u2019s session is complete.</string>
+    <string name="home_status_skipped">Today\u2019s reminders are skipped.</string>
+
+    <string name="home_sign_in_scheduled">Your sign-in reminder is scheduled for %1$s.</string>
+    <string name="home_signed_in_at">Signed in at %1$s</string>
+    <string name="home_sign_out_at">Sign-out reminder at %1$s</string>
+    <string name="home_sign_out_due">Your work-session reminder is due.</string>
+    <string name="home_session_complete">Today\u2019s session is complete.</string>
+    <string name="home_no_reminders">Reminders are disabled.</string>
+
+    <!-- Notifications -->
+    <string name="notif_channel_sign_in">Sign-in reminders</string>
+    <string name="notif_channel_sign_in_desc">Morning reminders to sign in to greytHR.</string>
+    <string name="notif_channel_sign_out">Sign-out reminders</string>
+    <string name="notif_channel_sign_out_desc">Reminders to sign out after your work session.</string>
+    <string name="notif_title_sign_in">Time to sign in</string>
+    <string name="notif_body_sign_in">Don\u2019t forget to sign in to greytHR.</string>
+    <string name="notif_title_sign_out">Time to sign out</string>
+    <string name="notif_body_sign_out">Your work session is complete. Please sign out of greytHR.</string>
+    <string name="notif_body_sign_out_dynamic">Your %1$s work session is complete. Please sign out of greytHR.</string>
+    <string name="notif_action_open">Open greytHR</string>
+    <string name="notif_action_confirm_sign_in">I\u2019ve signed in</string>
+    <string name="notif_action_confirm_sign_out">I\u2019ve signed out</string>
+    <plurals name="notif_action_snooze_duration">
+        <item quantity="one">Snooze %1$d minute</item>
+        <item quantity="other">Snooze %1$d minutes</item>
+    </plurals>
+    <string name="notif_group">Punch Reminder</string>
+
+    <!-- Settings -->
+    <string name="settings_workdays">Workdays</string>
+    <string name="settings_workdays_summary">Days on which reminders are active.</string>
+    <string name="settings_sign_in_time">Sign-in reminder time</string>
+    <string name="settings_sign_in_time_summary">Daily sign-in reminder time (local time).</string>
+    <string name="settings_session_duration">Work-session duration</string>
+    <string name="settings_session_duration_summary">Hours from confirmed sign-in to sign-out reminder.</string>
+    <string name="settings_repeat_interval">Reminder repetition interval</string>
+    <string name="settings_repeat_interval_summary">How often to repeat an ignored reminder.</string>
+    <string name="settings_snooze_duration">Snooze duration</string>
+    <string name="settings_snooze_duration_summary">How long a snooze delays the next reminder.</string>
+    <string name="settings_reminders_enabled">Enable reminders</string>
+    <string name="settings_reminders_enabled_summary">Turn all attendance reminders on or off.</string>
+    <string name="settings_sound">Notification sound</string>
+    <string name="settings_vibrate">Vibrate on reminders</string>
+    <string name="settings_restore_defaults">Restore default settings</string>
+    <string name="settings_confirm_restore">Restore all settings to their default values?</string>
+    <string name="settings_clear_history">Clear local history</string>
+    <string name="settings_clear_history_summary">Delete all locally recorded attendance history.</string>
+    <string name="settings_confirm_clear_history">This will permanently delete all local attendance history. This cannot be undone.</string>
+
+    <!-- GreytHR -->
+    <string name="greythr_open_failed">Could not open greytHR. Install it from the Play Store and try again.</string>
+
+    <!-- Permissions -->
+    <string name="permission_exact_alarm_title">Exact alarm permission</string>
+    <string name="permission_exact_alarm_message">
+        Punch Reminder needs to schedule exact reminders so notifications arrive on time.
+        Grant the \u201cAlarms and reminders\u201d permission for this app.
+    </string>
+    <string name="permission_exact_alarm_settings">Open exact-alarm settings</string>
+    <string name="permission_notification_title">Notification permission</string>
+    <string name="permission_notification_message">
+        Notifications are required for attendance reminders. Please enable notifications for this app.
+    </string>
+    <string name="permission_notification_settings">Open notification settings</string>
+
+    <!-- History -->
+    <string name="history_empty">No attendance history yet.</string>
+    <string name="history_column_date">Date</string>
+    <string name="history_column_sign_in">Sign-in (confirmed)</string>
+    <string name="history_column_sign_out_due">Sign-out reminder (calculated)</string>
+    <string name="history_column_sign_out">Sign-out (confirmed)</string>
+    <string name="history_column_state">State</string>
+    <string name="history_local_record">Locally recorded confirmation \u2014 not an official greytHR record.</string>
+
+    <!-- Accessibility -->
+    <string name="accessibility_service_description">Monitors greytHR for attendance confirmation screens so Punch Reminder can automatically detect when you sign in or sign out.</string>
+    <string name="auto_detect_title">Auto-detect attendance</string>
+    <string name="auto_detect_summary">Automatically detect sign-in/sign-out from greytHR notifications or screen content. Requires enabling accessibility service in system settings.</string>
+    <string name="auto_detect_enabled">Auto-detect is active</string>
+    <string name="auto_detect_disabled">Enable in Settings</string>
+
+    <!-- Misc -->
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="error">Error</string>
+    <string name="restored_defaults">Settings restored to defaults.</string>
+    <string name="history_cleared">Local history cleared.</string>
+    <string name="session_skipped">Today\u2019s reminders are skipped.</string>
+    <string name="sign_in_recorded">Sign-in recorded at %1$s. Sign-out reminder set for %2$s.</string>
+    <string name="sign_out_recorded">Sign-out recorded at %1$s. Today\u2019s session is complete.</string>
+</resources>

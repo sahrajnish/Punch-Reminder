@@ -1,0 +1,5 @@
+// Top-level build file. Plugin versions are managed in settings.gradle via pluginManagement.
+
+tasks.register("clean", Delete) {
+    delete rootProject.layout.buildDirectory
+}

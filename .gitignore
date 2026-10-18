@@ -1,0 +1,29 @@
+# Gradle build outputs
+.gradle/
+build/
+app/build/
+.kotlin/
+
+# Android Studio / IntelliJ local state
+.idea/
+*.iml
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Local machine configuration (contains the SDK path)
+local.properties
+
+# Signing secrets
+*.jks
+*.keystore
+keystore.properties
+
+# Generated / local files
+*.hprof
+*.log
+.DS_Store
+Thumbs.db
+
+# Keep the Gradle wrapper JAR committed
+!gradle/wrapper/gradle-wrapper.jar
