@@ -4,6 +4,14 @@ plugins {
     id 'org.jetbrains.kotlin.kapt'
 }
 
+// Release signing is configured locally via keystore.properties (gitignored).
+// When the file is absent, assembleRelease produces an unsigned APK instead.
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.withInputStream { keystoreProperties.load(it) }
+}
+
 android {
     namespace = "com.punchreminder.app"
     compileSdk = 34
@@ -18,10 +26,24 @@ android {
 
     }
 
+    signingConfigs {
+        release {
+            if (keystorePropertiesFile.exists()) {
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+            }
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled = false
-            shrinkResources = false
+            if (keystorePropertiesFile.exists()) {
+                signingConfig signingConfigs.release
+            }
+            minifyEnabled = true
+            shrinkResources = true
             debuggable = false
             proguardFiles(getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro')
         }

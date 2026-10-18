@@ -220,3 +220,11 @@ All tests are pure JVM tests (no Android dependencies) and can be run with `./gr
 - Uses the app's blue accent (`#8AB4F8`) and off-white check on a deep near-black blue radial background.
 - Rebuilt as proper adaptive-icon vector layers (background, foreground) with a monochrome layer for Android 13+ themed icons.
 - Regenerated the legacy PNG launcher/round icons for API 24-25 and removed the obsolete raster layers.
+
+### 10. Signed release build
+**Files:** `app/build.gradle`, `app/proguard-rules.pro`, `keystore.properties.example`, `releases/`, `README.md`
+
+- Added release signing support through a local, gitignored `keystore.properties`.
+- Enabled R8 code shrinking and resource shrinking for release builds.
+- Built and verified the signed **1.0.0** release APK and added it under `releases/`.
+- Documented download, installation, checksums, and release-key handling.

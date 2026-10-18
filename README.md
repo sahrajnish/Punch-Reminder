@@ -19,6 +19,19 @@ history, and gets out of the way.
 Everything runs on-device. There is no account, no cloud sync, no analytics, and no
 network permission.
 
+## Download
+
+A signed release APK is included in this repository:
+
+- [**Punch Reminder 1.0.0 APK**](releases/Punch-Reminder-v1.0.0.apk)
+- SHA-256: `2407855f57132dd56c99a4b813ce584d8be82d4bbb96d97fcd43a8b7bd736a80`
+
+```bash
+adb install -r releases/Punch-Reminder-v1.0.0.apk
+```
+
+See [`releases/README.md`](releases/README.md) for signing details and checksums.
+
 ## Features
 
 - **Sign-in reminder** — a notification at your configured time on your selected workdays
@@ -105,6 +118,21 @@ Key domain pieces:
 ```
 
 The APK is written to `app/build/outputs/apk/debug/app-debug.apk`.
+
+### Release build
+
+Release builds use a local signing key configured in `keystore.properties` (gitignored).
+Copy `keystore.properties.example`, point it at your keystore, then run:
+
+```bash
+./gradlew assembleRelease
+```
+
+The signed APK is written to `app/build/outputs/apk/release/app-release.apk`. R8 and
+resource shrinking are enabled for release builds.
+
+> Keep your release keystore and `keystore.properties` backed up. Android will reject
+> future updates signed with a different key.
 
 ### Install
 
