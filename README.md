@@ -23,11 +23,11 @@ network permission.
 
 A signed release APK is included in this repository:
 
-- [**Punch Reminder 1.0.0 APK**](releases/Punch-Reminder-v1.0.0.apk)
-- SHA-256: `2407855f57132dd56c99a4b813ce584d8be82d4bbb96d97fcd43a8b7bd736a80`
+- [**Punch Reminder 1.0.1 APK**](releases/Punch-Reminder-v1.0.1.apk)
+- SHA-256: `94816e16c1f60eedae42c73d62ce118b58d9169a2640b40714c27d64b61465a8`
 
 ```bash
-adb install -r releases/Punch-Reminder-v1.0.0.apk
+adb install -r releases/Punch-Reminder-v1.0.1.apk
 ```
 
 See [`releases/README.md`](releases/README.md) for signing details and checksums.
@@ -87,7 +87,7 @@ See [`releases/README.md`](releases/README.md) for signing details and checksums
 app/src/main/java/com/punchreminder/app/
 ├── data/       Room database, DAO, repositories, settings
 ├── domain/     Pure scheduling/state logic, workday cycle, greytHR launcher interface
-├── service/    Alarm receivers, notification helper, accessibility/notification listeners
+├── service/    Alarm receivers, notification helper, boot/daily refresh receivers
 └── ui/         Compose screens, view models, and theme
 
 app/src/test/   Pure-JVM unit tests for the domain logic
@@ -155,11 +155,6 @@ sdk.dir=/path/to/Android/Sdk
 | Vibrate | Optional vibration on reminders |
 | Receive boot completed | Rebuild the reminder schedule after reboot |
 
-Optional integrations, if you enable them in system settings:
-
-- **Notification access** — detect greytHR attendance confirmations from notifications.
-- **Accessibility service** — detect greytHR confirmation text on screen.
-
 The app does **not** request the `INTERNET` permission.
 
 ## Testing
@@ -185,12 +180,11 @@ rollover/auto-close behavior, and reminder cancellation.
 Punch Reminder can:
 
 - Open the installed greytHR app (or its Play Store listing).
-- Optionally observe greytHR notifications or confirmation text, when you grant the
-  corresponding system access.
 
 Punch Reminder does **not**:
 
 - Fetch attendance records from greytHR.
+- Read notifications or screen content.
 - Sign in to greytHR on your behalf.
 - Store greytHR passwords or bypass multi-factor authentication.
 - Call unofficial or scraped greytHR endpoints.

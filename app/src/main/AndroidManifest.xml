@@ -25,17 +25,6 @@
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
 
     <!--
-      Required for the accessibility service to monitor GreytHR UI.
-    -->
-    <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE" />
-
-    <!--
-      BIND_NOTIFICATION_LISTENER_SERVICE is a system permission granted by the system,
-      not declared in the manifest;
-      the user grants notification access through Settings.
-    -->
-
-    <!--
       Package visibility (Android 11 / API 30+).
       Without these declarations the app cannot see whether greytHR is installed, so the
       "Open greytHR" button would never find the app. The market:// entry lets us resolve the
@@ -112,35 +101,6 @@
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
             </intent-filter>
         </receiver>
-
-        <!--
-          Accessibility service that monitors GreytHR for attendance confirmation screens.
-          The user must enable this in Settings > Accessibility > Punch Reminder.
-        -->
-        <service
-            android:name=".service.GreytHrAttendanceMonitorService"
-            android:exported="true"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
-            <intent-filter>
-                <action android:name="android.accessibilityservice.AccessibilityService" />
-            </intent-filter>
-            <meta-data
-                android:name="android.accessibilityservice"
-                android:resource="@xml/accessibility_service_config" />
-        </service>
-
-        <!--
-          Notification listener that intercepts GreytHR attendance notifications.
-          The user must enable this in Settings > Apps > Special app access > Notification access.
-        -->
-        <service
-            android:name=".service.GreytHrNotificationListener"
-            android:exported="true"
-            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
-            <intent-filter>
-                <action android:name="android.service.notification.NotificationListenerService" />
-            </intent-filter>
-        </service>
 
         <!--
           Daily safety net: rebuilds the day's schedule shortly after midnight and re-arms itself,

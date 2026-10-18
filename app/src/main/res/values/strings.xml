@@ -96,13 +96,6 @@
     <string name="history_column_state">State</string>
     <string name="history_local_record">Locally recorded confirmation \u2014 not an official greytHR record.</string>
 
-    <!-- Accessibility -->
-    <string name="accessibility_service_description">Monitors greytHR for attendance confirmation screens so Punch Reminder can automatically detect when you sign in or sign out.</string>
-    <string name="auto_detect_title">Auto-detect attendance</string>
-    <string name="auto_detect_summary">Automatically detect sign-in/sign-out from greytHR notifications or screen content. Requires enabling accessibility service in system settings.</string>
-    <string name="auto_detect_enabled">Auto-detect is active</string>
-    <string name="auto_detect_disabled">Enable in Settings</string>
-
     <!-- Misc -->
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>

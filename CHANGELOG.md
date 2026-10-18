@@ -228,3 +228,11 @@ All tests are pure JVM tests (no Android dependencies) and can be run with `./gr
 - Enabled R8 code shrinking and resource shrinking for release builds.
 - Built and verified the signed **1.0.0** release APK and added it under `releases/`.
 - Documented download, installation, checksums, and release-key handling.
+
+### 11. Version 1.0.1 — remove sensitive services
+**Files:** `app/src/main/AndroidManifest.xml`, removed `GreytHrAttendanceMonitorService.kt`, `GreytHrNotificationListener.kt`, `accessibility_service_config.xml`, `res/values/strings.xml`, `app/build.gradle`, `README.md`, `releases/`
+
+- Removed the optional accessibility service and notification-listener service.
+- Removed the related `BIND_ACCESSIBILITY_SERVICE` permission, service declarations, config, and strings.
+- Rebuilt as version **1.0.1** (versionCode 2) and republished the signed APK.
+- This avoids Google Play Protect blocking sideloaded installs with the "This app can request access to sensitive data" warning. Core reminder/history/theme functionality is unchanged.
