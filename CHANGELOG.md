@@ -245,3 +245,11 @@ All tests are pure JVM tests (no Android dependencies) and can be run with `./gr
 - Added an **I've signed out** action while a session is open.
 - Home actions dismiss the matching notification when used.
 - Bumped to version **1.1.0** (versionCode 3).
+
+### 13. Version 1.1.1 — color-coded Home actions
+**Files:** `ui/home/HomeScreen.kt`, `ui/theme/Color.kt`, `app/build.gradle`, `README.md`, `releases/`
+
+- The **I've signed in** Home button is green, matching the sign-in icon.
+- The **I've signed out** Home button is red, matching the sign-out icon.
+- Added `onSuccess` / `onDanger` accent colors so button content stays readable in both themes.
+- Bumped to version **1.1.1** (versionCode 4).

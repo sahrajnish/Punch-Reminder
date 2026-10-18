@@ -53,12 +53,14 @@ val DangerRed = Color(0xFFFF7B7B)
 @Immutable
 data class PunchAccentColors(
     val success: Color,
+    val onSuccess: Color,
     val successContainer: Color,
     val onSuccessContainer: Color,
     val warning: Color,
     val warningContainer: Color,
     val onWarningContainer: Color,
     val danger: Color,
+    val onDanger: Color,
     val dangerContainer: Color,
     val onDangerContainer: Color,
     val statusCard: Color,
@@ -71,12 +73,14 @@ data class PunchAccentColors(
 /** Accents tuned for the dark scheme. */
 val DarkPunchAccentColors = PunchAccentColors(
     success = SuccessGreen,
+    onSuccess = Color(0xFF06210F),
     successContainer = SuccessGreenContainer,
     onSuccessContainer = SuccessGreen,
     warning = WarnAmber,
     warningContainer = WarnAmberContainer,
     onWarningContainer = WarnAmber,
     danger = DangerRed,
+    onDanger = Color(0xFF3A0A0A),
     dangerContainer = Color(0xFF4A1414),
     onDangerContainer = Color(0xFFFFDAD6),
     statusCard = StatusCardBlue,
@@ -89,12 +93,14 @@ val DarkPunchAccentColors = PunchAccentColors(
 /** Accents tuned for the light scheme (darker content, soft containers). */
 val LightPunchAccentColors = PunchAccentColors(
     success = Color(0xFF1B7A43),
+    onSuccess = Color(0xFFFFFFFF),
     successContainer = Color(0xFFD7F5E3),
     onSuccessContainer = Color(0xFF0A4524),
     warning = Color(0xFF8A5A00),
     warningContainer = Color(0xFFFFEBC2),
     onWarningContainer = Color(0xFF573900),
     danger = Color(0xFFB3261E),
+    onDanger = Color(0xFFFFFFFF),
     dangerContainer = Color(0xFFF9DEDC),
     onDangerContainer = Color(0xFF410002),
     statusCard = Color(0xFFD6E7FA),

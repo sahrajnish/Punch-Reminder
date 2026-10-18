@@ -1,31 +1,32 @@
 # Releases
 
-## Punch Reminder 1.1.0
+## Punch Reminder 1.1.1
 
 | | |
 |---|---|
-| File | `Punch-Reminder-v1.1.0.apk` |
-| Version | 1.1.0 (versionCode 3) |
+| File | `Punch-Reminder-v1.1.1.apk` |
+| Version | 1.1.1 (versionCode 4) |
 | Min SDK | 24 |
 | Target SDK | 34 |
 | Size | ~3.0 MB |
-| SHA-256 | `f75e44dca726ec63f2ed5563512bfe5de5d3b40e9417479b4955faa107bb0ac8` |
+| SHA-256 | `7bb57410ef9830623fc2ce9592f55c044ac4faed6a1c7c14a722d4403127eb86` |
 | Signing certificate SHA-256 | `4836a72d857e4feac3d8873c434e2248bd8528c1d5ac7873c5907ed8ea75409e` |
 
-### What's new in 1.1.0
+### What's new in 1.1.1
 
-- **Home quick actions:** confirm sign-in and sign-out directly from the Home screen.
-- The **I've signed in** action appears once your configured sign-in time has passed.
-- Before that time, Home shows when the action becomes available.
-- While a session is open, **I've signed out** appears on Home.
-- Using a Home action dismisses the matching reminder notification.
+- **I've signed in** is now green, matching the sign-in icon.
+- **I've signed out** is now red, matching the sign-out icon.
+- Button content colors adapt for contrast in dark and light themes.
+
+Home quick actions from 1.1.0 remain: the sign-in action appears after your configured
+sign-in time, and the sign-out action appears while a session is open.
 
 ### Install
 
 On a connected device:
 
 ```bash
-adb install -r releases/Punch-Reminder-v1.1.0.apk
+adb install -r releases/Punch-Reminder-v1.1.1.apk
 ```
 
 Or copy the APK to the device and open it. You may need to allow installation from

@@ -23,11 +23,11 @@ network permission.
 
 A signed release APK is included in this repository:
 
-- [**Punch Reminder 1.1.0 APK**](releases/Punch-Reminder-v1.1.0.apk)
-- SHA-256: `f75e44dca726ec63f2ed5563512bfe5de5d3b40e9417479b4955faa107bb0ac8`
+- [**Punch Reminder 1.1.1 APK**](releases/Punch-Reminder-v1.1.1.apk)
+- SHA-256: `7bb57410ef9830623fc2ce9592f55c044ac4faed6a1c7c14a722d4403127eb86`
 
 ```bash
-adb install -r releases/Punch-Reminder-v1.1.0.apk
+adb install -r releases/Punch-Reminder-v1.1.1.apk
 ```
 
 See [`releases/README.md`](releases/README.md) for signing details and checksums.

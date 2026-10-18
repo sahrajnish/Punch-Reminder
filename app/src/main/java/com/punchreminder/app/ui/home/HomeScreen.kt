@@ -24,6 +24,7 @@ import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.NotificationsNone
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -57,6 +58,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val accents = LocalPunchAccentColors.current
 
     Column(
         modifier = modifier
@@ -81,11 +83,15 @@ fun HomeScreen(
             uiState.canSignIn -> PrimaryActionButton(
                 text = "I\u2019ve signed in",
                 icon = Icons.AutoMirrored.Filled.Login,
+                containerColor = accents.success,
+                contentColor = accents.onSuccess,
                 onClick = { viewModel.confirmSignIn() }
             )
             uiState.canSignOut -> PrimaryActionButton(
                 text = "I\u2019ve signed out",
                 icon = Icons.AutoMirrored.Filled.Logout,
+                containerColor = accents.danger,
+                contentColor = accents.onDanger,
                 onClick = { viewModel.confirmSignOut() }
             )
             uiState.state == AttendanceState.NOT_SIGNED_IN && uiState.signInTimeText.isNotBlank() -> {
@@ -228,6 +234,8 @@ private fun SessionCard(uiState: HomeUiState) {
 private fun PrimaryActionButton(
     text: String,
     icon: ImageVector,
+    containerColor: Color,
+    contentColor: Color,
     onClick: () -> Unit
 ) {
     Button(
@@ -235,7 +243,11 @@ private fun PrimaryActionButton(
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp),
-        shape = MaterialTheme.shapes.large
+        shape = MaterialTheme.shapes.large,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = containerColor,
+            contentColor = contentColor
+        )
     ) {
         Icon(
             imageVector = icon,
