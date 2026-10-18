@@ -1,30 +1,31 @@
 # Releases
 
-## Punch Reminder 1.0.1
+## Punch Reminder 1.1.0
 
 | | |
 |---|---|
-| File | `Punch-Reminder-v1.0.1.apk` |
-| Version | 1.0.1 (versionCode 2) |
+| File | `Punch-Reminder-v1.1.0.apk` |
+| Version | 1.1.0 (versionCode 3) |
 | Min SDK | 24 |
 | Target SDK | 34 |
 | Size | ~3.0 MB |
-| SHA-256 | `94816e16c1f60eedae42c73d62ce118b58d9169a2640b40714c27d64b61465a8` |
+| SHA-256 | `f75e44dca726ec63f2ed5563512bfe5de5d3b40e9417479b4955faa107bb0ac8` |
 | Signing certificate SHA-256 | `4836a72d857e4feac3d8873c434e2248bd8528c1d5ac7873c5907ed8ea75409e` |
 
-### What changed in 1.0.1
+### What's new in 1.1.0
 
-Removed the optional accessibility service and notification listener. Those services
-requested sensitive system access and caused Google Play Protect to block sideloaded
-installs with a "can request sensitive data" warning. The core reminder, history, theme,
-and settings features are unchanged.
+- **Home quick actions:** confirm sign-in and sign-out directly from the Home screen.
+- The **I've signed in** action appears once your configured sign-in time has passed.
+- Before that time, Home shows when the action becomes available.
+- While a session is open, **I've signed out** appears on Home.
+- Using a Home action dismisses the matching reminder notification.
 
 ### Install
 
 On a connected device:
 
 ```bash
-adb install -r releases/Punch-Reminder-v1.0.1.apk
+adb install -r releases/Punch-Reminder-v1.1.0.apk
 ```
 
 Or copy the APK to the device and open it. You may need to allow installation from

@@ -23,6 +23,7 @@ import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.NotificationsNone
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -36,6 +37,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.punchreminder.app.domain.AttendanceState
@@ -74,6 +76,28 @@ fun HomeScreen(
         StatusCard(uiState)
 
         SessionCard(uiState)
+
+        when {
+            uiState.canSignIn -> PrimaryActionButton(
+                text = "I\u2019ve signed in",
+                icon = Icons.AutoMirrored.Filled.Login,
+                onClick = { viewModel.confirmSignIn() }
+            )
+            uiState.canSignOut -> PrimaryActionButton(
+                text = "I\u2019ve signed out",
+                icon = Icons.AutoMirrored.Filled.Logout,
+                onClick = { viewModel.confirmSignOut() }
+            )
+            uiState.state == AttendanceState.NOT_SIGNED_IN && uiState.signInTimeText.isNotBlank() -> {
+                Text(
+                    text = "Sign-in action available after ${uiState.signInTimeText}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
 
         OutlinedButton(
             onClick = { viewModel.openGreytHR() },
@@ -197,6 +221,32 @@ private fun SessionCard(uiState: HomeUiState) {
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun PrimaryActionButton(
+    text: String,
+    icon: ImageVector,
+    onClick: () -> Unit
+) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp),
+        shape = MaterialTheme.shapes.large
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            modifier = Modifier.size(20.dp)
+        )
+        Spacer(Modifier.width(10.dp))
+        Text(
+            text = text,
+            style = MaterialTheme.typography.titleMedium
+        )
     }
 }
 

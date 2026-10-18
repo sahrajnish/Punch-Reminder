@@ -23,11 +23,11 @@ network permission.
 
 A signed release APK is included in this repository:
 
-- [**Punch Reminder 1.0.1 APK**](releases/Punch-Reminder-v1.0.1.apk)
-- SHA-256: `94816e16c1f60eedae42c73d62ce118b58d9169a2640b40714c27d64b61465a8`
+- [**Punch Reminder 1.1.0 APK**](releases/Punch-Reminder-v1.1.0.apk)
+- SHA-256: `f75e44dca726ec63f2ed5563512bfe5de5d3b40e9417479b4955faa107bb0ac8`
 
 ```bash
-adb install -r releases/Punch-Reminder-v1.0.1.apk
+adb install -r releases/Punch-Reminder-v1.1.0.apk
 ```
 
 See [`releases/README.md`](releases/README.md) for signing details and checksums.
@@ -42,6 +42,7 @@ See [`releases/README.md`](releases/README.md) for signing details and checksums
 - **Snooze** — postpone a reminder from the notification; the label matches your configured
   snooze duration.
 - **Actionable notifications** — open greytHR, confirm sign-in, confirm sign-out, or snooze.
+- **Home quick actions** — confirm sign-in or sign-out directly on the Home screen. The sign-in action appears once your configured sign-in time arrives.
 - **Day-bounded cycle** — the workday runs 12:00 AM–11:59 PM local time. If you forget to
   sign out, the session is closed automatically at the end of the day and recorded as
   **Not signed out**.
@@ -59,8 +60,7 @@ See [`releases/README.md`](releases/README.md) for signing details and checksums
 1. At the configured time, Punch Reminder notifies you to sign in.
 2. After signing in to greytHR, you tap **I've signed in** in the app or notification.
 3. The app records the sign-in instant and schedules the sign-out reminder for the end of
-   your configured session.
-4. When the reminder arrives, you tap **I've signed out** and the day is complete.
+   your configured session.4. When the reminder arrives, you tap **I've signed out** and the day is complete.
 5. If you forget, the day closes at midnight and appears in history as **Not signed out**.
 6. The next workday starts fresh with a new reminder.
 

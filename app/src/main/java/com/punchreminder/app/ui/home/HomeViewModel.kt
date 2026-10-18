@@ -26,7 +26,12 @@ data class HomeUiState(
     val actualSignIn: String? = null,
     val actualSignOut: String? = null,
     val nextReminderText: String = "",
+    val signInTimeText: String = "",
     val state: AttendanceState = AttendanceState.NOT_SIGNED_IN,
+    /** Show "I've signed in" on Home: not signed in yet and the configured time has passed. */
+    val canSignIn: Boolean = false,
+    /** Show "I've signed out" on Home while the session is open. */
+    val canSignOut: Boolean = false,
     val remindersEnabled: Boolean = true,
     val isWorkday: Boolean = true,
     val isSkipped: Boolean = false,
@@ -95,9 +100,19 @@ class HomeViewModel : ViewModel() {
                     rescheduleAndCleanUp()
                 }
                 val zoned = now.atZone(latestZone)
-                _uiState.value = _uiState.value.copy(
+                val snapshot = _uiState.value
+                val canSignInNow = snapshot.state == AttendanceState.NOT_SIGNED_IN &&
+                    latestSettings?.let { settings ->
+                        val signInInstant = zoned.toLocalDate()
+                            .atTime(settings.signInHour, settings.signInMinute)
+                            .atZone(latestZone)
+                            .toInstant()
+                        !now.isBefore(signInInstant)
+                    } == true
+                _uiState.value = snapshot.copy(
                     currentDate = zoned.format(dateFormatter),
-                    currentTime = zoned.format(clockFormatter)
+                    currentTime = zoned.format(clockFormatter),
+                    canSignIn = canSignInNow
                 )
                 delay(1_000)
             }
@@ -135,6 +150,14 @@ class HomeViewModel : ViewModel() {
 
         val isWorkdayToday = Workdays.isWorkday(settings.workdays, today.dayOfWeek)
         val signInTimeText = formatLocalTime(today, settings.signInHour, settings.signInMinute, zone)
+        val currentState = session?.state ?: AttendanceState.NOT_SIGNED_IN
+        val signInInstant = today
+            .atTime(settings.signInHour, settings.signInMinute)
+            .atZone(zone)
+            .toInstant()
+        val canSignIn = currentState == AttendanceState.NOT_SIGNED_IN && !now.isBefore(signInInstant)
+        val canSignOut = currentState == AttendanceState.SIGNED_IN ||
+            currentState == AttendanceState.SIGN_OUT_DUE
 
         // Headline and supporting line for the status card.
         val statusTitle: String
@@ -221,7 +244,10 @@ class HomeViewModel : ViewModel() {
             actualSignIn = actualSignIn,
             actualSignOut = actualSignOut,
             nextReminderText = nextReminderText,
-            state = session?.state ?: AttendanceState.NOT_SIGNED_IN,
+            signInTimeText = signInTimeText,
+            state = currentState,
+            canSignIn = canSignIn,
+            canSignOut = canSignOut,
             remindersEnabled = settings.remindersEnabled,
             isWorkday = isWorkdayToday,
             isSkipped = session?.state == AttendanceState.SKIPPED,
@@ -238,6 +264,7 @@ class HomeViewModel : ViewModel() {
     fun confirmSignIn() {
         viewModelScope.launch {
             repo.confirmSignIn()
+            DiContainer.notificationHelper.cancelSignIn()
             // UI updates reactively via observeSession()
         }
     }
@@ -246,6 +273,7 @@ class HomeViewModel : ViewModel() {
     fun confirmSignOut() {
         viewModelScope.launch {
             repo.confirmSignOut()
+            DiContainer.notificationHelper.cancelAll()
             // UI updates reactively via observeSession()
         }
     }

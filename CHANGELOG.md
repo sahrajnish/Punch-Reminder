@@ -236,3 +236,12 @@ All tests are pure JVM tests (no Android dependencies) and can be run with `./gr
 - Removed the related `BIND_ACCESSIBILITY_SERVICE` permission, service declarations, config, and strings.
 - Rebuilt as version **1.0.1** (versionCode 2) and republished the signed APK.
 - This avoids Google Play Protect blocking sideloaded installs with the "This app can request access to sensitive data" warning. Core reminder/history/theme functionality is unchanged.
+
+### 12. Version 1.1.0 — Home quick actions
+**Files:** `ui/home/HomeScreen.kt`, `ui/home/HomeViewModel.kt`, `app/build.gradle`, `README.md`, `releases/`
+
+- Added a primary **I've signed in** action to Home.
+- The sign-in action appears once the configured sign-in time has passed; before then, Home shows "Sign-in action available after <time>".
+- Added an **I've signed out** action while a session is open.
+- Home actions dismiss the matching notification when used.
+- Bumped to version **1.1.0** (versionCode 3).
