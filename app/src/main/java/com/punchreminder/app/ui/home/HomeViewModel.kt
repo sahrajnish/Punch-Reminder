@@ -27,6 +27,7 @@ data class HomeUiState(
     val actualSignOut: String? = null,
     val nextReminderText: String = "",
     val signInTimeText: String = "",
+    val pauseReason: String? = null,
     val state: AttendanceState = AttendanceState.NOT_SIGNED_IN,
     /** Show "I've signed in" on Home: not signed in yet and the configured time has passed. */
     val canSignIn: Boolean = false,
@@ -180,8 +181,13 @@ class HomeViewModel : ViewModel() {
                 statusSubtitle = "Remember to sign out of greytHR."
             }
             AttendanceState.SKIPPED -> {
-                statusTitle = "Reminders skipped today"
-                statusSubtitle = "You won\u2019t be reminded again today."
+                statusTitle = "Reminders paused today"
+                val reason = session.pauseReason
+                statusSubtitle = if (!reason.isNullOrBlank()) {
+                    "$reason \u00b7 Resumes tomorrow."
+                } else {
+                    "They\u2019ll resume tomorrow."
+                }
             }
             else -> {
                 if (!settings.remindersEnabled) {
@@ -245,6 +251,7 @@ class HomeViewModel : ViewModel() {
             actualSignOut = actualSignOut,
             nextReminderText = nextReminderText,
             signInTimeText = signInTimeText,
+            pauseReason = session?.pauseReason,
             state = currentState,
             canSignIn = canSignIn,
             canSignOut = canSignOut,
@@ -278,9 +285,18 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    fun skipToday() {
+    fun pauseToday(reason: String) {
         viewModelScope.launch {
-            repo.skipToday()
+            if (_uiState.value.state != AttendanceState.NOT_SIGNED_IN) return@launch
+            repo.skipToday(reason)
+            DiContainer.notificationHelper.cancelAll()
+            // UI updates reactively via observeSession()
+        }
+    }
+
+    fun resumeToday() {
+        viewModelScope.launch {
+            repo.resumeToday()
             // UI updates reactively via observeSession()
         }
     }

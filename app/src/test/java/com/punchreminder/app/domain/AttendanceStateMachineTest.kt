@@ -116,12 +116,23 @@ class AttendanceStateMachineTest {
         assertFalse(machine.canTransition(AttendanceState.NOT_SIGNED_OUT, AttendanceEvent.SKIP_TODAY))
     }
 
-    // Invalid: SKIPPED -> anything (terminal state)
+    // A paused/skipped day can be resumed before it ends.
     @Test
-    fun `skipped is terminal no transitions`() {
+    fun `skipped can resume today`() {
+        assertTrue(machine.canTransition(AttendanceState.SKIPPED, AttendanceEvent.RESUME_TODAY))
+        assertEquals(
+            AttendanceState.NOT_SIGNED_IN,
+            machine.transition(AttendanceState.SKIPPED, AttendanceEvent.RESUME_TODAY)
+        )
+    }
+
+    // Invalid: SKIPPED cannot directly confirm attendance; resume first.
+    @Test
+    fun `skipped cannot confirm sign in or out directly`() {
         assertFalse(machine.canTransition(AttendanceState.SKIPPED, AttendanceEvent.CONFIRM_SIGN_IN))
         assertFalse(machine.canTransition(AttendanceState.SKIPPED, AttendanceEvent.CONFIRM_SIGN_OUT))
         assertFalse(machine.canTransition(AttendanceState.SKIPPED, AttendanceEvent.RESTORE_DUE))
+        assertFalse(machine.canTransition(AttendanceState.SKIPPED, AttendanceEvent.DAY_ENDED))
         assertFalse(machine.canTransition(AttendanceState.SKIPPED, AttendanceEvent.SKIP_TODAY))
     }
 

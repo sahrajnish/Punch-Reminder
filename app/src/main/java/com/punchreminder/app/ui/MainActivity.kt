@@ -1,6 +1,7 @@
 package com.punchreminder.app.ui
 
 import android.Manifest
+import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
@@ -47,12 +48,14 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.punchreminder.app.DiContainer
+import com.punchreminder.app.service.NotificationHelper
 import com.punchreminder.app.ui.components.HDivider
 import com.punchreminder.app.ui.home.HomeScreen
 import com.punchreminder.app.ui.history.HistoryScreen
 import com.punchreminder.app.ui.settings.SettingsScreen
 import com.punchreminder.app.ui.theme.PunchReminderTheme
 import com.punchreminder.app.ui.theme.colorSchemeFor
+import kotlinx.coroutines.flow.MutableStateFlow
 
 /** The three destinations reachable from the bottom navigation bar. */
 private enum class AppTab(val label: String, val icon: ImageVector) {
@@ -62,20 +65,41 @@ private enum class AppTab(val label: String, val icon: ImageVector) {
 }
 
 class MainActivity : ComponentActivity() {
+
+    /** Set when the notification's Pause action opens the app; Home shows the reason picker. */
+    private val pauseRequest = MutableStateFlow(false)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // Apply the persisted theme before the first frame so a light-theme user does not see a
         // dark window flash while Compose starts up.
         applyThemeChrome(darkTheme = DiContainer.settingsRepository.settings.value.darkTheme)
+        handlePauseIntent(intent)
 
         setContent {
             val settings by DiContainer.settingsRepository.settings.collectAsState()
             val darkTheme = settings.darkTheme
+            val pauseRequested by pauseRequest.collectAsState()
             LaunchedEffect(darkTheme) { applyThemeChrome(darkTheme) }
             PunchReminderTheme(darkTheme = darkTheme) {
-                AppRoot()
+                AppRoot(
+                    pauseRequested = pauseRequested,
+                    onPauseRequestConsumed = { pauseRequest.value = false }
+                )
             }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handlePauseIntent(intent)
+    }
+
+    private fun handlePauseIntent(intent: Intent?) {
+        if (intent?.action == NotificationHelper.PAUSE_TODAY) {
+            pauseRequest.value = true
         }
     }
 
@@ -98,8 +122,15 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun AppRoot() {
+fun AppRoot(
+    pauseRequested: Boolean = false,
+    onPauseRequestConsumed: () -> Unit = {}
+) {
     var selectedTab by remember { mutableStateOf(AppTab.HOME) }
+
+    LaunchedEffect(pauseRequested) {
+        if (pauseRequested) selectedTab = AppTab.HOME
+    }
 
     // Notification permission (Android 13+). Requested once for the whole app.
     var notificationRequested by rememberSaveable { mutableStateOf(false) }
@@ -125,7 +156,10 @@ fun AppRoot() {
     ) { innerPadding ->
         Box(Modifier.fillMaxSize().padding(innerPadding)) {
             when (selectedTab) {
-                AppTab.HOME -> HomeScreen()
+                AppTab.HOME -> HomeScreen(
+                    pauseRequested = pauseRequested,
+                    onPauseRequestConsumed = onPauseRequestConsumed
+                )
                 AppTab.HISTORY -> HistoryScreen()
                 AppTab.SETTINGS -> SettingsScreen()
             }

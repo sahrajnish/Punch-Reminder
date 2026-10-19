@@ -11,9 +11,10 @@ package com.punchreminder.app.domain
  *   SIGN_OUT_DUE   --(CONFIRM_SIGN_OUT)--> SIGNED_OUT
  *   SIGN_OUT_DUE   --(DAY_ENDED)--------> NOT_SIGNED_OUT (forgot to sign out)
  *   any            --(SKIP_TODAY)-------> SKIPPED
+ *   SKIPPED        --(RESUME_TODAY)-----> NOT_SIGNED_IN
  *
- * Signed-out, not-signed-out and skipped sessions are terminal for the workday and cannot be
- * reopened, which prevents duplicate sessions/timers from being created.
+ * Signed-out and not-signed-out sessions are terminal for the workday and cannot be reopened.
+ * A skipped session can be resumed before the day ends.
  */
 class AttendanceStateMachine {
 
@@ -56,8 +57,11 @@ class AttendanceStateMachine {
             AttendanceState.NOT_SIGNED_OUT ->
                 throw IllegalArgumentException("No transitions are valid from $current")
 
-            AttendanceState.SKIPPED ->
-                throw IllegalArgumentException("No transitions are valid from ${AttendanceState.SKIPPED}")
+            AttendanceState.SKIPPED -> when (event) {
+                AttendanceEvent.RESUME_TODAY -> AttendanceState.NOT_SIGNED_IN
+                else -> throw IllegalArgumentException(
+                    "$event is not valid from ${AttendanceState.SKIPPED}")
+            }
         }
     }
 }

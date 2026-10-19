@@ -20,6 +20,7 @@ data class AttendanceSessionEntity(
     @ColumnInfo(name = "scheduled_sign_out_at") val scheduledSignOutAt: Long?,
     @ColumnInfo(name = "next_reminder_at") val nextReminderAt: Long?,
     @ColumnInfo(name = "next_reminder_kind") val nextReminderKind: String?,
+    @ColumnInfo(name = "pause_reason") val pauseReason: String?,
     @ColumnInfo(name = "created_at") val createdAt: Long,
     @ColumnInfo(name = "updated_at") val updatedAt: Long
 )

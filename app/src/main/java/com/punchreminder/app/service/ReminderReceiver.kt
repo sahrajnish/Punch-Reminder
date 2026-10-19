@@ -40,7 +40,7 @@ class ReminderReceiver : BroadcastReceiver() {
         val notif = DiContainer.notificationHelper
         val launcher = DiContainer.greytHrLauncher
 
-        val openIntent = NotificationHelper.broadcastIntent(DiContainer.context, NotificationHelper.OPEN_GREYTHR)
+        val openIntent = NotificationHelper.openAppIntent(DiContainer.context)
 
         when (action) {
             ACTION_SIGN_IN_REMINDER -> {
@@ -53,6 +53,7 @@ class ReminderReceiver : BroadcastReceiver() {
                         openIntent = openIntent,
                         confirmIntent = confirm,
                         snoozeIntent = snooze,
+                        pauseIntent = NotificationHelper.pauseTodayIntent(DiContainer.context),
                         snoozeMinutes = settings.snoozeMinutes
                     )
                 }

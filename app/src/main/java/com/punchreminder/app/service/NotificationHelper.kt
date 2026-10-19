@@ -122,6 +122,7 @@ class NotificationHelper(private val context: Context) {
         openIntent: PendingIntent,
         confirmIntent: PendingIntent,
         snoozeIntent: PendingIntent,
+        pauseIntent: PendingIntent,
         snoozeMinutes: Int
     ) {
         val notification = buildNotification(
@@ -131,13 +132,17 @@ class NotificationHelper(private val context: Context) {
             body = context.getString(R.string.notif_body_sign_in),
             contentIntent = openIntent,
             actions = listOf(
-                action(context.getString(R.string.notif_action_open), OPEN_GREYTHR, openIntent),
                 action(
                     context.getString(R.string.notif_action_confirm_sign_in),
                     CONFIRM_SIGN_IN,
                     confirmIntent
                 ),
-                action(snoozeActionLabel(snoozeMinutes), SNOOZE_SIGN_IN, snoozeIntent)
+                action(snoozeActionLabel(snoozeMinutes), SNOOZE_SIGN_IN, snoozeIntent),
+                action(
+                    context.getString(R.string.notif_action_pause),
+                    PAUSE_TODAY,
+                    pauseIntent
+                )
             )
         )
         manager.notify(NOTIFICATION_ID_SIGN_IN, notification)
@@ -163,7 +168,6 @@ class NotificationHelper(private val context: Context) {
             body = body,
             contentIntent = openIntent,
             actions = listOf(
-                action(context.getString(R.string.notif_action_open), OPEN_GREYTHR, openIntent),
                 action(
                     context.getString(R.string.notif_action_confirm_sign_out),
                     CONFIRM_SIGN_OUT,
@@ -229,6 +233,7 @@ class NotificationHelper(private val context: Context) {
         const val CONFIRM_SIGN_OUT = "com.punchreminder.app.action.CONFIRM_SIGN_OUT"
         const val SNOOZE_SIGN_IN = "com.punchreminder.app.action.SNOOZE_SIGN_IN"
         const val SNOOZE_SIGN_OUT = "com.punchreminder.app.action.SNOOZE_SIGN_OUT"
+        const val PAUSE_TODAY = "com.punchreminder.app.action.PAUSE_TODAY"
 
         fun broadcastIntent(context: Context, action: String): PendingIntent {
             val intent = Intent(context, ReminderReceiver::class.java).apply {
@@ -242,12 +247,44 @@ class NotificationHelper(private val context: Context) {
             )
         }
 
+        /** Opens Punch Reminder (used when the notification body is tapped). */
+        fun openAppIntent(context: Context): PendingIntent {
+            val intent = Intent(context, com.punchreminder.app.ui.MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP
+            }
+            return PendingIntent.getActivity(
+                context,
+                1007,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        }
+
+        /** Opens the app on Home and shows the pause-reason picker. */
+        fun pauseTodayIntent(context: Context): PendingIntent {
+            val intent = Intent(context, com.punchreminder.app.ui.MainActivity::class.java).apply {
+                action = PAUSE_TODAY
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP
+            }
+            return PendingIntent.getActivity(
+                context,
+                requestCodeFor(PAUSE_TODAY),
+                intent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        }
+
         private fun requestCodeFor(action: String): Int = when (action) {
             CONFIRM_SIGN_IN -> 1001
             CONFIRM_SIGN_OUT -> 1002
             SNOOZE_SIGN_IN -> 1003
             SNOOZE_SIGN_OUT -> 1004
             OPEN_GREYTHR -> 1005
+            PAUSE_TODAY -> 1006
             else -> 0
         }
     }

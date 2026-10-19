@@ -2,6 +2,7 @@ package com.punchreminder.app.ui.home
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,15 +24,24 @@ import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.NotificationsNone
+import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,10 +65,22 @@ import androidx.compose.foundation.ScrollState
 fun HomeScreen(
     modifier: Modifier = Modifier,
     scrollState: ScrollState = rememberScrollState(),
+    pauseRequested: Boolean = false,
+    onPauseRequestConsumed: () -> Unit = {},
     viewModel: HomeViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val accents = LocalPunchAccentColors.current
+
+    var showPauseDialog by remember { mutableStateOf(false) }
+    var selectedPauseReason by remember { mutableStateOf(PauseReasons.first()) }
+
+    LaunchedEffect(pauseRequested) {
+        if (pauseRequested) {
+            showPauseDialog = true
+            onPauseRequestConsumed()
+        }
+    }
 
     Column(
         modifier = modifier
@@ -105,6 +127,47 @@ fun HomeScreen(
             }
         }
 
+        when {
+            uiState.state == AttendanceState.NOT_SIGNED_IN -> {
+                TextButton(
+                    onClick = { showPauseDialog = true },
+                    colors = ButtonDefaults.textButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Pause,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        text = "Pause reminders for today",
+                        style = MaterialTheme.typography.titleSmall
+                    )
+                }
+            }
+            uiState.isSkipped -> {
+                TextButton(
+                    onClick = { viewModel.resumeToday() },
+                    colors = ButtonDefaults.textButtonColors(
+                        contentColor = MaterialTheme.colorScheme.primary
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.PlayArrow,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        text = "Resume reminders",
+                        style = MaterialTheme.typography.titleSmall
+                    )
+                }
+            }
+        }
+
         OutlinedButton(
             onClick = { viewModel.openGreytHR() },
             modifier = Modifier
@@ -126,6 +189,18 @@ fun HomeScreen(
                 color = MaterialTheme.colorScheme.primary
             )
         }
+    }
+
+    if (showPauseDialog) {
+        PauseTodayDialog(
+            selectedReason = selectedPauseReason,
+            onSelectReason = { selectedPauseReason = it },
+            onConfirm = {
+                viewModel.pauseToday(selectedPauseReason)
+                showPauseDialog = false
+            },
+            onDismiss = { showPauseDialog = false }
+        )
     }
 }
 
@@ -295,4 +370,62 @@ private fun statusIcon(uiState: HomeUiState): ImageVector = when (uiState.state)
     AttendanceState.SIGNED_OUT -> Icons.Filled.Check
     AttendanceState.SIGNED_IN -> Icons.AutoMirrored.Filled.Login
     else -> Icons.Filled.NotificationsNone
+}
+
+/** Reasons offered when pausing a day's reminders. */
+private val PauseReasons = listOf("PTO", "Company Holiday", "Sick Leave", "Other")
+
+@Composable
+private fun PauseTodayDialog(
+    selectedReason: String,
+    onSelectReason: (String) -> Unit,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        containerColor = MaterialTheme.colorScheme.surface,
+        title = { Text("Pause reminders for today?") },
+        text = {
+            Column {
+                Text(
+                    text = "No reminders will fire until tomorrow. This resets automatically at midnight.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(Modifier.height(16.dp))
+                PauseReasons.forEach { reason ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(MaterialTheme.shapes.small)
+                            .clickable { onSelectReason(reason) }
+                            .padding(vertical = 2.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(
+                            selected = selectedReason == reason,
+                            onClick = { onSelectReason(reason) }
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            text = reason,
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onConfirm) {
+                Text("Pause today")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    )
 }

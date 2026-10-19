@@ -17,10 +17,11 @@
 ## 2. Sign-In Reminder (Morning)
 
 - [ ] At 10:30 AM on a workday, notification appears: "Time to sign in"
-- [ ] Notification has actions: Open greytHR, I've signed in, Snooze <configured snooze duration>
-- [ ] "Open greytHR" launches the greytHR app, or opens its Play Store page if not installed
+- [ ] Notification has actions: I've signed in, Snooze <configured snooze duration>, Pause today
+- [ ] Tapping the notification body opens Punch Reminder (not greytHR)
 - [ ] "I've signed in" records the time, updates home screen, schedules sign-out reminder
 - [ ] "Snooze" delays the next reminder by the configured snooze duration (label matches it)
+- [ ] "Pause today" opens the app with the reason picker
 - [ ] Repeated reminders fire at the configured interval when ignored
 - [ ] No reminder on Saturday/Sunday (default configuration)
 - [ ] No reminder when reminders are disabled in Settings
@@ -39,7 +40,8 @@
 
 - [ ] At due time, notification appears: "Time to sign out"
 - [ ] Notification body shows the configured session duration (for example, "Your 9-hour work session is complete")
-- [ ] Actions: Open greytHR, I've signed out, Snooze <configured snooze duration>
+- [ ] Actions: I've signed out, Snooze <configured snooze duration>
+- [ ] Tapping the notification body opens Punch Reminder
 - [ ] "I've signed out" records time, cancels reminder, marks session complete
 - [ ] Home screen shows "Today's session is complete."
 - [ ] Repeated reminders fire at interval until sign-out confirmed
@@ -49,9 +51,11 @@
 
 - [ ] Confirming sign-in twice does not create duplicate timers
 - [ ] Confirming sign-out when not signed in shows no effect
-- [ ] Skipping today cancels today's reminders without deleting history
-- [ ] Signed-out session cannot be reopened
-- [ ] Skipped session cannot be reopened
+- [ ] Pausing today cancels today's reminders without deleting history
+- [ ] Paused day shows the chosen reason on Home and in History
+- [ ] Pause resets automatically on the next day
+- [ ] Resume reminders restores today's schedule
+- [ ] Paused session can be resumed; other terminal states cannot be reopened
 
 ## 6. Persistence & Recovery
 
@@ -80,6 +84,7 @@
 - [ ] Shows confirmed sign-in time (locally recorded)
 - [ ] Shows calculated sign-out reminder time
 - [ ] Shows confirmed sign-out time
+- [ ] Shows paused days with the selected reason
 - [ ] Shows skipped days
 - [ ] Shows auto-closed days as "Not signed out"
 - [ ] Swipe left reveals Delete; tapping it asks for confirmation and removes the record

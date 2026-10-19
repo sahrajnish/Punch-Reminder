@@ -202,6 +202,7 @@ class AttendanceRepository(
                     scheduledSignOutAt = scheduledSignOutAt,
                     nextReminderAt = scheduledSignOutAt,
                     nextReminderKind = ReminderKind.SIGN_OUT,
+                    pauseReason = null,
                     updatedAt = nowMillis
                 )
                 upsertSession(updated)
@@ -236,6 +237,7 @@ class AttendanceRepository(
                     confirmedSignOutAt = nowMillis,
                     nextReminderAt = null,
                     nextReminderKind = null,
+                    pauseReason = null,
                     updatedAt = nowMillis
                 )
                 upsertSession(updated)
@@ -377,8 +379,8 @@ class AttendanceRepository(
         }
     }
 
-    /** Skip today: cancel all reminders for today without deleting history. */
-    suspend fun skipToday() {
+    /** Pause today's reminders with an optional reason (PTO, holiday, etc.). Resets tomorrow. */
+    suspend fun skipToday(reason: String? = null) {
         withContext(Dispatchers.IO) {
             val session = findTodaysSession()
                 ?: AttendanceSession(workDate = clock.today().toString())
@@ -387,10 +389,29 @@ class AttendanceRepository(
                 state = AttendanceState.SKIPPED,
                 nextReminderAt = null,
                 nextReminderKind = null,
+                pauseReason = reason,
                 updatedAt = nowMillis
             )
             upsertSession(updated)
             scheduler.cancelAll()
+        }
+    }
+
+    /** Undo a pause for today and rebuild the day's reminder schedule. */
+    suspend fun resumeToday() {
+        withContext(Dispatchers.IO) {
+            val session = findTodaysSession() ?: return@withContext
+            if (session.state != AttendanceState.SKIPPED) return@withContext
+            val nowMillis = clock.now.toEpochMilli()
+            val updated = session.copy(
+                state = AttendanceState.NOT_SIGNED_IN,
+                pauseReason = null,
+                nextReminderAt = null,
+                nextReminderKind = null,
+                updatedAt = nowMillis
+            )
+            upsertSession(updated)
+            rescheduleAll()
         }
     }
 

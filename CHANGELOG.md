@@ -253,3 +253,18 @@ All tests are pure JVM tests (no Android dependencies) and can be run with `./gr
 - The **I've signed out** Home button is red, matching the sign-out icon.
 - Added `onSuccess` / `onDanger` accent colors so button content stays readable in both themes.
 - Bumped to version **1.1.1** (versionCode 4).
+
+### 14. Version 1.2.0 — pause today with a reason
+**Files:** `domain/`, `data/`, `ui/home/`, `ui/history/`, `service/NotificationHelper.kt`, `service/ReminderReceiver.kt`, `ui/MainActivity.kt`, `app/build.gradle`
+
+- Added **Pause reminders for today** with reasons: PTO, Company Holiday, Sick Leave, Other.
+- Pausing cancels the day's alarms and records the reason; it resets automatically at midnight.
+- Added **Resume reminders** (state-machine `SKIPPED → NOT_SIGNED_IN`) for accidental pauses.
+- Added a Room v1 → v2 migration for the new `pause_reason` column.
+- Home shows "Reminders paused today" with the reason; History shows a **PAUSED** pill and the reason.
+- Notification actions:
+  - Sign-in: **I've signed in** · **Snooze X** · **Pause today**
+  - Sign-out: **I've signed out** · **Snooze X**
+- Tapping **Pause today** in the notification opens the app with the reason picker.
+- Tapping the notification body now opens Punch Reminder; the explicit Open greytHR action was removed.
+- Bumped to version **1.2.0** (versionCode 5).

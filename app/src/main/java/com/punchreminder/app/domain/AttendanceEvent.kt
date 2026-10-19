@@ -11,6 +11,7 @@ enum class AttendanceEvent {
     CONFIRM_SIGN_OUT,
     RESTORE_DUE,   // session duration has elapsed; SIGNED_IN -> SIGN_OUT_DUE
     DAY_ENDED,     // local day ended before a sign-out was confirmed; auto-closes the session
-    SKIP_TODAY,    // user skipped today
+    SKIP_TODAY,    // user paused/skipped today's reminders
+    RESUME_TODAY,  // user resumed today's reminders after pausing
     SNOOZE,        // handled outside the state machine (no state change)
 }

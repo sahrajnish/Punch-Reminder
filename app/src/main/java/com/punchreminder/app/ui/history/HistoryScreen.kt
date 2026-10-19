@@ -65,7 +65,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 
 private const val STATE_COMPLETED = "COMPLETED"
-private const val STATE_SKIPPED = "SKIPPED"
+private const val STATE_PAUSED = "PAUSED"
 private const val STATE_SIGN_OUT_DUE = "SIGN-OUT DUE"
 private const val STATE_INCOMPLETE = "INCOMPLETE"
 private const val STATE_NOT_SIGNED_OUT = "NOT SIGNED OUT"
@@ -358,11 +358,22 @@ private fun HistoryRow(item: HistoryItem) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = item.date,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = item.date,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                if (!item.note.isNullOrBlank()) {
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        text = item.note,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+            Spacer(Modifier.width(12.dp))
             StatusPill(item.state)
         }
 
@@ -404,7 +415,7 @@ private fun StatusPill(state: String) {
             container = accents.successContainer
             content = accents.onSuccessContainer
         }
-        STATE_SKIPPED, STATE_SIGN_OUT_DUE, STATE_INCOMPLETE, STATE_NOT_SIGNED_OUT -> {
+        STATE_PAUSED, STATE_SIGN_OUT_DUE, STATE_INCOMPLETE, STATE_NOT_SIGNED_OUT -> {
             container = accents.warningContainer
             content = accents.onWarningContainer
         }

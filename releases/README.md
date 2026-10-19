@@ -1,32 +1,39 @@
 # Releases
 
-## Punch Reminder 1.1.1
+## Punch Reminder 1.2.0
 
 | | |
 |---|---|
-| File | `Punch-Reminder-v1.1.1.apk` |
-| Version | 1.1.1 (versionCode 4) |
+| File | `Punch-Reminder-v1.2.0.apk` |
+| Version | 1.2.0 (versionCode 5) |
 | Min SDK | 24 |
 | Target SDK | 34 |
 | Size | ~3.0 MB |
-| SHA-256 | `7bb57410ef9830623fc2ce9592f55c044ac4faed6a1c7c14a722d4403127eb86` |
+| SHA-256 | `d343e7b4b0107215a31ed305ccf779608a5d753b1ab565779400483ab29f83cd` |
 | Signing certificate SHA-256 | `4836a72d857e4feac3d8873c434e2248bd8528c1d5ac7873c5907ed8ea75409e` |
 
-### What's new in 1.1.1
+### What's new in 1.2.0
 
-- **I've signed in** is now green, matching the sign-in icon.
-- **I've signed out** is now red, matching the sign-out icon.
-- Button content colors adapt for contrast in dark and light themes.
-
-Home quick actions from 1.1.0 remain: the sign-in action appears after your configured
-sign-in time, and the sign-out action appears while a session is open.
+- **Pause reminders for today** from Home, with a reason:
+  - PTO
+  - Company Holiday
+  - Sick Leave
+  - Other
+- The pause cancels today's reminders and **resets automatically at midnight**.
+- **Resume reminders** restores the day's schedule if you paused by mistake.
+- History shows a **PAUSED** pill with the reason under the date.
+- Notification actions:
+  - Sign-in reminder: **I've signed in** · **Snooze X** · **Pause today**
+  - Sign-out reminder: **I've signed out** · **Snooze X**
+- Tapping the notification body now opens **Punch Reminder** instead of greytHR.
+- Tapping **Pause today** in the notification opens the app with the reason picker.
 
 ### Install
 
 On a connected device:
 
 ```bash
-adb install -r releases/Punch-Reminder-v1.1.1.apk
+adb install -r releases/Punch-Reminder-v1.2.0.apk
 ```
 
 Or copy the APK to the device and open it. You may need to allow installation from

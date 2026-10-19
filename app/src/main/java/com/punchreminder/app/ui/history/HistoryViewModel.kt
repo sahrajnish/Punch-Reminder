@@ -61,7 +61,7 @@ class HistoryViewModel : ViewModel() {
                         signOut = session.confirmedSignOutAt?.let { formatInstant(it, zone) },
                         totalDuration = workedMillis?.let { formatDuration(it) },
                         note = when (session.state) {
-                            AttendanceState.SKIPPED -> "Skipped by user"
+                            AttendanceState.SKIPPED -> session.pauseReason ?: "Paused by user"
                             AttendanceState.NOT_SIGNED_OUT -> "Auto-closed at end of day"
                             else -> null
                         }
@@ -116,7 +116,7 @@ class HistoryViewModel : ViewModel() {
         AttendanceState.SIGNED_OUT ->
             if (workedMillis != null && workedMillis < requiredMillis) "Incomplete" else "Completed"
         AttendanceState.NOT_SIGNED_OUT -> "Not signed out"
-        AttendanceState.SKIPPED -> "Skipped"
+        AttendanceState.SKIPPED -> "Paused"
     }
 
     private fun formatInstant(millis: Long, zone: ZoneId): String =

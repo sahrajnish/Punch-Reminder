@@ -28,6 +28,8 @@ data class AttendanceSession(
     val nextReminderAt: Long? = null,
     /** The kind of the pending reminder, matching [nextReminderAt]. */
     val nextReminderKind: ReminderKind? = null,
+    /** Optional reason when the user paused reminders for this day (PTO, holiday, etc.). */
+    val pauseReason: String? = null,
     val createdAt: Long = 0,
     val updatedAt: Long = 0
 )

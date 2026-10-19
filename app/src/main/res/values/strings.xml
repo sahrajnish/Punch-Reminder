@@ -41,9 +41,9 @@
     <string name="notif_title_sign_out">Time to sign out</string>
     <string name="notif_body_sign_out">Your work session is complete. Please sign out of greytHR.</string>
     <string name="notif_body_sign_out_dynamic">Your %1$s work session is complete. Please sign out of greytHR.</string>
-    <string name="notif_action_open">Open greytHR</string>
     <string name="notif_action_confirm_sign_in">I\u2019ve signed in</string>
     <string name="notif_action_confirm_sign_out">I\u2019ve signed out</string>
+    <string name="notif_action_pause">Pause today</string>
     <plurals name="notif_action_snooze_duration">
         <item quantity="one">Snooze %1$d minute</item>
         <item quantity="other">Snooze %1$d minutes</item>
